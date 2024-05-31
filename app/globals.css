@@ -1,0 +1,117 @@
+@tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+  @layer base {
+    * {
+      @apply border-border;
+    }
+    body {
+      @apply bg-background text-foreground;
+    }
+  }
+
+  @keyframes underline-animation {
+    0% {
+      width: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    50% {
+      width: 100%;
+      left: 0;
+      transform: translateX(0%);
+    }
+    100% {
+      width: 100%; /* Keep the width at 100% */
+      left: 0; /* Keep the left position at 0 */
+      transform: translateX(0%);
+    }
+  }
+  
+  .underline-animation {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .underline-animation::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px; /* Adjust this value to move the underline closer or further from the text */
+    width: 0;
+    height: 2.2px; /* Adjust the thickness of the underline */
+    background-color: #1db6f8; /* Tailwind sky-500 color */
+    transition: cubic-bezier(0.47, 0, 0.745, 0.715);
+    border-radius: 1px;
+  }
+  
+  .underline-animation:hover::after,
+  .underline-animation-active::after {
+    animation: underline-animation 1s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 1px; /* width of the scrollbar */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* color of the track */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #000000; /* color of the scrollbar */
+    border-radius: 2.5px; /* roundness of the scrollbar thumb */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #000000; /* color of the scrollbar thumb on hover */
+  }
