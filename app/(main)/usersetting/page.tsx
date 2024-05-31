@@ -2,11 +2,12 @@ import Settings from '@/app/components/Settings/Settings';
 import prisma from '@/app/lib/db';
 import { Card } from '@/components/ui/card'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
+import { unstable_noStore } from 'next/cache';
 import React from 'react'
 
-async function getdata(userId:string) {
+async function getdata(userId: string) {
     const data = await prisma.user.findUnique({
-        where:{
+        where: {
             id: userId
         },
         select: {
@@ -20,6 +21,7 @@ async function getdata(userId:string) {
 
 
 export default async function page() {
+    unstable_noStore();
 
     const { getUser } = getKindeServerSession();
     const user = await getUser();
@@ -30,16 +32,16 @@ export default async function page() {
 
     const Userdata = await getdata(user.id)
 
-  return (
-      <section className='px-4 md:px-8 mx-auto max-w-7xl mb-10'>
-          <Card>
-              <Settings email={Userdata?.email as string}
-                  firstName={Userdata?.firstName as string}
-                  lastName={Userdata?.lastName as string}
-                 userId={user.id }
-              />
+    return (
+        <section className='px-4 md:px-8 mx-auto max-w-7xl mb-10'>
+            <Card>
+                <Settings email={Userdata?.email as string}
+                    firstName={Userdata?.firstName as string}
+                    lastName={Userdata?.lastName as string}
+                    userId={user.id}
+                />
 
-          </Card>
-    </section>
-  )
+            </Card>
+        </section>
+    )
 }
