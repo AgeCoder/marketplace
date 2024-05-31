@@ -48,7 +48,7 @@ async function GetData(category: string) {
     return data
 }
 
-export const Products = async ({ params }: Params) => {
+const Products = async ({ params }: Params) => {
     const data = await GetData(params?.category);
     //   console.log(data);
     return (
@@ -80,3 +80,7 @@ export const Products = async ({ params }: Params) => {
 
 
 export default Products
+
+
+
+
