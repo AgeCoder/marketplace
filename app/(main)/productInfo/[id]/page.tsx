@@ -54,8 +54,8 @@ const Page = async ({ params }: { params: Params }) => {
                         <CarouselContent>
                             {data?.images.map((item, index) => (
                                 <CarouselItem key={index}>
-                                    <div className="overflow-hidden rounded-xl aspect-w-2 aspect-h-1">
-                                        <Image alt={data.name} src={item} fill className='object-contain' />
+                                    <div className="overflow-hidden rounded-xl aspect-w-3 aspect-h-2">
+                                        <Image alt={data.name} src={item} fill className='object-fill' />
                                     </div>
                                 </CarouselItem>
                             ))}

@@ -18,7 +18,7 @@ export type State = {
 const productSchemsZod = z.object({
   name: z.string().min(3, { message: "Name should be min length of 3" }),
   category: z.string().min(1, { message: "Category is required" }),
-  price: z.number().min(1, { message: "price is required" }),
+  price: z.number().min(199, { message: "price is required" }),
   shortSummary: z.string().min(12, { message: "Short Summary is required " }),
   description: z.string().min(15, { message: "Description is required" }),
   images: z.array(z.string(), { message: "Images are required" }),
@@ -122,6 +122,8 @@ export async function UpdateUserInfo(prevState: any, formData: FormData) {
 }
 
 export async function MakePayment(formData: FormData) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
   const data = await prisma.product.findUnique({
     where: {
       id: formData.get("productId") as string,
@@ -131,6 +133,7 @@ export async function MakePayment(formData: FormData) {
       price: true,
       images: true,
       shortSummary: true,
+      productfile: true,
       User: {
         select: {
           connectedAccountId: true,
@@ -138,6 +141,9 @@ export async function MakePayment(formData: FormData) {
       },
     },
   });
+  if (!user) {
+    redirect("/");
+  }
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -155,6 +161,12 @@ export async function MakePayment(formData: FormData) {
         quantity: 1,
       },
     ],
+
+    metadata: {
+      NotFound: data?.productfile as string,
+      UserID: user.id as string,
+    },
+
     payment_intent_data: {
       application_fee_amount: Math.round((data?.price as number) * 100) * 0.1, // 10% of the total amount
       transfer_data: {

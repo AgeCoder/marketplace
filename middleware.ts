@@ -3,5 +3,11 @@ export default function middleware(req: any) {
   return withAuth(req);
 }
 export const config = {
-  matcher: ["/sell", "/usersetting", "/my-products", "/billing"],
+  matcher: [
+    "/sell",
+    "/usersetting",
+    "/my-products",
+    "/billing",
+    "/productInfo/(.*)",
+  ],
 };

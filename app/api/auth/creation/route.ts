@@ -9,19 +9,21 @@ export async function GET() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user || user == null || !user.id) {
-    throw new Error("issue in creation about user");
-  }
+  console.log(user);
+
+  // if (!user || user == null || !user.id) {
+  //   throw new Error("issue in creation about user");
+  // }
 
   let dbUser = await prisma.user.findUnique({
     where: {
-      id: user.id,
+      id: user?.id,
     },
   });
 
   if (!dbUser) {
     const stripeaccount = await stripe.accounts.create({
-      email: user.email as string,
+      email: user?.email as string,
       controller: {
         losses: {
           payments: "application",
@@ -37,13 +39,13 @@ export async function GET() {
 
     dbUser = await prisma.user.create({
       data: {
-        id: user.id ?? "",
-        email: user.email ?? "",
-        firstName: user.given_name ?? "",
-        lastName: user.family_name ?? "",
+        id: user?.id ?? "",
+        email: user?.email ?? "",
+        firstName: user?.given_name ?? "",
+        lastName: user?.family_name ?? "",
         profileImage:
-          user.picture ?? `https://avatar.vercel.sh/${user.given_name}`,
-        connectedAccountId: stripeaccount.id,
+          user?.picture ?? `https://avatar.vercel.sh/${user?.given_name}`,
+        connectedAccountId: await stripeaccount.id,
       },
     });
   }
