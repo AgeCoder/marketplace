@@ -7,6 +7,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
 import { Toaster } from "@/components/ui/sonner"
 import Footer from "./components/Footer";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +36,10 @@ export default function RootLayout({
         <Footer />
         <Toaster richColors closeButton theme="light" position="top-center" />
       </body>
+      <Script
+        id="rzpscript"
+        src="https://checkout.razorpay.com/v1/checkout.js"
+      ></Script>
     </html>
   );
 }

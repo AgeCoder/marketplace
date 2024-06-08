@@ -1,10 +1,7 @@
-import { MakePayment } from '@/app/action';
+import MakePaymentButton from '@/app/components/MakePaymentButton';
 import ProductDes from '@/app/components/ProductDes';
-import { BuySubmitButton } from '@/app/components/SubmitButton';
 import prisma from '@/app/lib/db';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Card, CardHeader } from '@/components/ui/card';
+
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { JSONContent } from '@tiptap/react';
 import { unstable_noStore } from 'next/cache';
@@ -21,6 +18,7 @@ async function GetData(id: string) {
             id: id,
         },
         select: {
+            id: true,
             name: true,
             description: true,
             price: true,
@@ -70,12 +68,7 @@ const Page = async ({ params }: { params: Params }) => {
                             <dt className="font-medium text-gray-900">Title</dt>
                             <dd className="text-gray-700 sm:col-span-2">{data?.name}</dd>
                         </div>
-                        <div className="grid grid-cols-1 gap-1 p-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
-                            <dt className="font-medium text-gray-900">Creator</dt>
-                            <dd className="text-gray-700 sm:col-span-2">
-                                {data?.User?.firstName + ' ' + data?.User?.lastName}
-                            </dd>
-                        </div>
+
                         <div className="grid grid-cols-1 gap-1 p-3 even:bg-gray-50 sm:grid-cols-3 sm:gap-4">
                             <dt className="font-medium text-gray-900">Category</dt>
                             <dd className="text-gray-700 sm:col-span-2">{data?.category}</dd>
@@ -95,25 +88,15 @@ const Page = async ({ params }: { params: Params }) => {
                             </dd>
                         </div>
                         <div className="p-3 w-full">
-                            <form action={MakePayment}>
+                            {/* <form action={MakePayment}>
                                 <input type="hidden" value={params.id} name='productId' />
                                 <BuySubmitButton title='Buy Now' />
-                            </form>
+                            </form> */}
+                            <MakePaymentButton data={data} />
                         </div>
                     </dl>
                 </div>
             </div>
-            <Card>
-                <CardHeader>
-                    <div className='flex gap-3 items-center'>
-                        <Avatar className='h-10 w-10'>
-                            <AvatarImage src={data?.User?.profileImage} alt={data?.User?.firstName}></AvatarImage>
-                            <AvatarFallback>{data?.User?.firstName}</AvatarFallback>
-                        </Avatar>
-                        <h3 className='font-extrabold'>{data?.User?.firstName + ' ' + data?.User?.lastName}</h3>
-                    </div>
-                </CardHeader>
-            </Card>
             <div className='mt-2'>
                 <ProductDes content={data?.description as JSONContent} />
             </div>

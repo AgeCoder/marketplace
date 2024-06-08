@@ -4,7 +4,6 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { z } from "zod";
 import prisma from "@/app/lib/db";
 import { CategoryType } from "@prisma/client";
-import { stripe } from "./lib/stripe";
 import { redirect } from "next/navigation";
 
 export type State = {
@@ -60,7 +59,7 @@ export async function SellProducts(prevState: any, formData: FormData) {
     return state;
   }
 
-  await prisma.product.create({
+  const data = await prisma.product.create({
     data: {
       name: validateFields.data.name,
       category: validateFields.data.category as CategoryType,
@@ -72,6 +71,8 @@ export async function SellProducts(prevState: any, formData: FormData) {
       userId: user.id,
     },
   });
+
+  // console.log(data);
 
   const state: State = {
     status: "success",
@@ -121,111 +122,10 @@ export async function UpdateUserInfo(prevState: any, formData: FormData) {
   return state;
 }
 
-export async function MakePayment(formData: FormData) {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  const data = await prisma.product.findUnique({
-    where: {
-      id: formData.get("productId") as string,
-    },
-    select: {
-      name: true,
-      price: true,
-      images: true,
-      shortSummary: true,
-      productfile: true,
-      User: {
-        select: {
-          connectedAccountId: true,
-        },
-      },
-    },
-  });
-  if (!user) {
-    redirect("/");
+export async function navigate(result: any) {
+  if (result.message === "Email Sent Successfully") {
+    redirect("/payment/success");
+  } else {
+    redirect("/payment/cancel");
   }
-
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    line_items: [
-      {
-        price_data: {
-          currency: "inr",
-          unit_amount: Math.round((data?.price as number) * 100),
-          product_data: {
-            name: data?.name as string,
-            description: data?.shortSummary as string,
-            images: data?.images,
-          },
-        },
-        quantity: 1,
-      },
-    ],
-
-    metadata: {
-      NotFound: data?.productfile as string,
-      UserID: user.id as string,
-    },
-
-    payment_intent_data: {
-      application_fee_amount: Math.round((data?.price as number) * 100) * 0.1, // 10% of the total amount
-      transfer_data: {
-        destination: data?.User?.connectedAccountId as string,
-      },
-    },
-    success_url: `${process.env.url}/payment/success`,
-    cancel_url: `${process.env.url}/payment/cancel`,
-  });
-
-  return redirect(session.url as string);
-}
-
-export async function LinkAccountToStripe() {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  if (!user) {
-    redirect("/");
-  }
-
-  const userData = await prisma.user.findUnique({
-    where: {
-      id: user.id,
-    },
-    select: {
-      connectedAccountId: true,
-    },
-  });
-
-  const accountlink = await stripe.accountLinks.create({
-    account: userData?.connectedAccountId as string,
-    refresh_url: `${process.env.url}/billing`,
-    return_url: `${process.env.url}/billing`,
-    type: "account_onboarding",
-  });
-
-  return redirect(accountlink.url);
-}
-
-export async function ViewStripeDashboard() {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-
-  if (!user) {
-    redirect("/");
-  }
-
-  const userData = await prisma.user.findUnique({
-    where: {
-      id: user.id,
-    },
-    select: {
-      connectedAccountId: true,
-    },
-  });
-
-  const DashboardLink = await stripe.accounts.createLoginLink(
-    userData?.connectedAccountId as string
-  );
-
-  return redirect(DashboardLink.url);
 }

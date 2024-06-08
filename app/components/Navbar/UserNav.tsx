@@ -30,18 +30,18 @@ const UserNav = ({ email, Userimage, name, shortname }: userProps) => {
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                    <Link href='/sell'>Sell Your Product</Link>
-                </DropdownMenuItem>
+
                 <DropdownMenuItem asChild>
                     <Link href='/usersetting'>Setting</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                    <Link href='/my-products'>My Products</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                    <Link href='/billing'>Billings</Link>
-                </DropdownMenuItem>
+                {email == "vedantnavale45@gmail.com" && (
+                    <>
+                        <DropdownMenuItem asChild>
+                            <Link href='/XadminVedant1008'>Admin Dashboard</Link>
+                        </DropdownMenuItem>
+
+                    </>
+                )}
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>

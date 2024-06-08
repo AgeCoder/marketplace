@@ -1,5 +1,4 @@
 import prisma from "@/app/lib/db";
-import { stripe } from "@/app/lib/stripe";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { unstable_noStore } from "next/cache";
 import { NextResponse } from "next/server";
@@ -9,11 +8,11 @@ export async function GET() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  console.log(user);
+  // console.log(user);
 
-  // if (!user || user == null || !user.id) {
-  //   throw new Error("issue in creation about user");
-  // }
+  if (!user || user == null || !user.id) {
+    throw new Error("issue in creation about user");
+  }
 
   let dbUser = await prisma.user.findUnique({
     where: {
@@ -22,21 +21,6 @@ export async function GET() {
   });
 
   if (!dbUser) {
-    const stripeaccount = await stripe.accounts.create({
-      email: user?.email as string,
-      controller: {
-        losses: {
-          payments: "application",
-        },
-        fees: {
-          payer: "application",
-        },
-        stripe_dashboard: {
-          type: "express",
-        },
-      },
-    });
-
     dbUser = await prisma.user.create({
       data: {
         id: user?.id ?? "",
@@ -45,10 +29,9 @@ export async function GET() {
         lastName: user?.family_name ?? "",
         profileImage:
           user?.picture ?? `https://avatar.vercel.sh/${user?.given_name}`,
-        connectedAccountId: await stripeaccount.id,
       },
     });
   }
 
-  return NextResponse.redirect(process.env.url as string);
+  return NextResponse.redirect(process.env.NEXT_PUBLIC_URl as string);
 }

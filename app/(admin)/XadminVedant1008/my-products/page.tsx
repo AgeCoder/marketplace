@@ -3,6 +3,7 @@ import prisma from '@/app/lib/db'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { unstable_noStore } from 'next/cache'
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 async function GetData(userId: string) {
@@ -27,9 +28,12 @@ const page = async () => {
     unstable_noStore();
     const { getUser } = getKindeServerSession();
     const user = await getUser()
+    if (user?.email != "vedantnavale45@gmail.com") {
+        redirect('/')
+    }
     const data = await GetData(user?.id as string);
     return (
-        <section className='px-4 md:px-8 mx-auto mb-10'>
+        <section className=' mx-auto md:px-12 mb-10'>
             <Card>
                 <CardHeader>
                     <div className="flex justify-between items-center">
