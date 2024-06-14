@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getKindeServerSession, LogoutLink } from '@kinde-oss/kinde-auth-nextjs/server'
 import { Computer, LogOutIcon, PackagePlus, PackageSearch, } from 'lucide-react'
+import Link from 'next/link';
 import React from 'react'
 
 export default async function SideMenu() {
@@ -22,8 +23,8 @@ export default async function SideMenu() {
                 <div className="border-t border-gray-100">
                     <div className="px-2">
                         <div className="py-4">
-                            <a
-                                href="/XadminVedant1008/"
+                            <Link
+                                href="/data"
                                 className="t group relative flex justify-center rounded bg-blue-50 px-2 py-1.5 text-blue-700"
                             >
                                 <Computer />
@@ -33,13 +34,13 @@ export default async function SideMenu() {
                                 >
                                     Dashboard
                                 </span>
-                            </a>
+                            </Link>
                         </div>
 
                         <ul className="space-y-1 border-t border-gray-100 pt-4">
                             <li>
-                                <a
-                                    href="/XadminVedant1008/sell"
+                                <Link
+                                    href="/data/sell"
                                     className="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                                 >
                                     <PackagePlus />
@@ -48,12 +49,12 @@ export default async function SideMenu() {
                                     >
                                         Add Products
                                     </span>
-                                </a>
+                                </Link>
                             </li>
 
                             <li>
-                                <a
-                                    href="/XadminVedant1008/my-products"
+                                <Link
+                                    href="/data/my-products"
                                     className="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                                 >
 
@@ -63,7 +64,7 @@ export default async function SideMenu() {
                                     >
                                         Products
                                     </span>
-                                </a>
+                                </Link>
                             </li>
 
                         </ul>

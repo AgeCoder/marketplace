@@ -37,7 +37,7 @@ const UserNav = ({ email, Userimage, name, shortname }: userProps) => {
                 {email == "vedantnavale45@gmail.com" && (
                     <>
                         <DropdownMenuItem asChild>
-                            <Link href='/XadminVedant1008'>Admin Dashboard</Link>
+                            <Link href='/data'>Admin Dashboard</Link>
                         </DropdownMenuItem>
 
                     </>

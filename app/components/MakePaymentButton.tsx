@@ -6,6 +6,7 @@ import shortid from 'shortid';
 import { redirect } from 'next/navigation';
 import { toast } from 'sonner';
 import { navigate } from '../action';
+import { Loader } from 'lucide-react';
 
 async function AfterPaymentSuccess(data: any) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URl}/api/razorpay/after-payment/`, {
@@ -86,7 +87,7 @@ export default function MakePaymentButton({ data }: any) {
     return (
         <div className='p-3 w-full'>
             <Button onClick={handleClick} className='w-full' disabled={loading}>
-                {loading ? 'Processing...' : 'Buy now'}
+                {loading ? <span className='flex gap-1'><Loader className='animate-spin' /> Loading...</span> : 'Buy now'}
             </Button>
         </div>
     );
