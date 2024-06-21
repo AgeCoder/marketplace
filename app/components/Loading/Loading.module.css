@@ -1,0 +1,26 @@
+/* components/Loading.module.css */
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .companyName {
+    background: linear-gradient(to right, #ffffff, #0059ff, #0088ff, #000000);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 200% 400%;
+    border: #ffffff;
+    animation: loadingAnimation 10s infinite;
+  }
+  
+  @keyframes loadingAnimation {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+  
